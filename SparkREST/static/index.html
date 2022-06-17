@@ -1,151 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JAX-RS demo</title>
-<script src="jquery.min.js"></script>
-<script type="text/javascript">
-function getFormData($form){
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
+    <meta charset="utf-8" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/event-card.css" rel="stylesheet" />
+    <link href="css/rating-stars.css" rel="stylesheet" />
+    <link href="css/ol.css" rel="stylesheet" />
+    <link href="css/navbar.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 
-    $.map(unindexed_array, function(n, i){
-        indexed_array[n['name']] = n['value'];
-    });
-
-    return indexed_array;
-}
-
-/*
- * Šalje AJAX zahtev ka testjson REST servisu.
- * Kao parametar POST metode, šalje objekat klase Student, zapakovan u JSON.
- * Prima takođe JSON string, koji je takođe objekat klase Student, a koji 
- * vraća testjson REST servis.
- */
-function sendStudent() {
-	var $form = $("#jsonform");
-	var data = getFormData($form);
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/demo/testjson",
-		type:"POST",
-		data: s,
-		contentType:"application/json",
-		dataType:"json",
-		complete: function(data) {
-			$( "#result" ).html( data.responseText );
-		}
-	});
-}
-
-function login() {
-	var $form = $("#login");
-	var data = getFormData($form);
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/demo/login",
-		type:"POST",
-		data: s,
-		contentType:"application/json",
-		dataType:"json",
-		complete: function(data) {
-			$( "#resultLogin" ).html( data.responseText );
-		}
-	});
-}
-
-function loginJWT() {
-	var $form = $("#login");
-	var data = getFormData($form);
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/demo/loginJWT",
-		type:"POST",
-		data: s,
-		contentType:"application/json",
-		dataType:"json",
-		complete: function(data) {
-			$( "#resultLoginJWT" ).html( data.responseText );
-			window.localStorage.setItem('jwt', data.responseText);
-		}
-	});
-}
-
-function testJWT() {
-	var sjwt = window.localStorage.getItem('jwt');
-	var jwt;
-	if (!sjwt) 
-		jwt = '';
-	else 
-		jwt = JSON.parse(sjwt).JWTToken;
-	$.ajax({
-		url: "rest/demo/testloginJWT",
-		type:"GET",
-		headers: {
-	        'Authorization':'Bearer ' + jwt
-	    },
-		contentType:"application/json",
-		dataType:"json",
-		complete: function(data) {
-			$( "#resultLoginJWT" ).html( data.responseText );
-		}
-	});
-}
-
-</script>
 </head>
 <body>
 
-	<a href="rest/demo/test">Test</a> <br />
-	<a href="rest/demo/book/101-456-890">Test PathParam</a> <br />
-	<a href="rest/demo/books?num=123456">Test QueryParam</a> <br />
-	<a href="rest/demo/testheader">Test HeaderParam</a> <br />
-	<a href="rest/demo/testcookie">Test CookieParam</a> <br />
-	
-	<form action="/rest/demo/forma" method="post">
-	<fieldset>
-	<legend>Test forme, preko x-www-form-urlencoded </legend>
-		<input type="text" name="ime" value="Pera"/><br />
-		<input type="text" name="prezime" value="Perić" /><br />
-		<input type="submit" value="submit" /> <br />
-	</fieldset>
-	</form> <br />
-	
-	<form id="jsonform">
-	<fieldset>
-	<legend>Test forme i JSON</legend>
-		<input type="text" name="ime" value="Pera"/><br />
-		<input type="text" name="prezime" value="Perić" /><br />
-		<input type="button" value="submit" onclick="sendStudent()"/> <br />
-		<fieldset><div id="result">Rezultat poziva</div></fieldset>
-	</fieldset>
-	</form> <br />
+<div id="app">
+    <navbar></navbar>
+    <router-view></router-view>
+</div>
 
-	<form id="login" >
-	<fieldset>
-	<legend>Prijava na sistem</legend>
-		<input type="text" name="username" value="Pera"/><br />
-		<input type="text" name="password" value="Perić" /><br />
-		<input type="button" value="submit" onclick="login()"/> <br />
-		<fieldset><div id="resultLogin">Rezultat poziva</div></fieldset><br />
-	<a href="rest/demo/testlogin">Test Login logike</a> <br />
-	<a href="rest/demo/logout">Logout</a> <br />
-	</fieldset>
-	</form> <br />
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/toast.js"></script>
 
-	<form id="loginJWT" >
-	<fieldset>
-	<legend>Prijava na sistem upotrebom JWT</legend>
-		<input type="text" name="username" value="Pera"/><br />
-		<input type="text" name="password" value="Perić" /><br />
-		<input type="button" value="submit" onclick="loginJWT()"/> <br />
-		<fieldset><div id="resultLoginJWT">Rezultat poziva</div></fieldset><br />
-	<a href="rest/demo/testloginJWT">Test Login logike koji ne radi (jer ne ugrađuje token u zahtev - nije cookie)</a> <br />
-	<a href="javascript:testJWT()">Test Login logike</a> <br />
-	<a href="javascript:window.localStorage.removeItem('jwt'); alert('Logged off')">Logout</a> <br />
-	</fieldset>
-	</form> <br />
+<script src="app/app.js"></script>
+<script src="app/Navbar.js"></script>
 
-	<a href="chat.html">WebSocket chat primer</a>
+<script src="app/Register.js"></script>
+<h1>EVO NAS</h1>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </body>
-</html>

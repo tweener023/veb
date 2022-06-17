@@ -52,7 +52,7 @@ public class Customer extends User {
 		return points;
 	}
 	
-	public void setPoionts(int points) {
+	public void setPoints(int points) {
 		this.points = points;
 	}
 	
