@@ -2,12 +2,12 @@ Vue.component("Register", {
 
     data() {
         return {
-            firstName: null,
-            lastName: null,
+            name: null,
+            surname: null,
             password: null,
             password2: null,
             gender: null,
-            birthday: null,
+            dateOfBirth: null,
         }
     },
 
@@ -17,8 +17,8 @@ Vue.component("Register", {
             e.preventDefault();
 
             this.errors = null;
-            if(!this.firstName || !this.lastName || !this.username || !this.password ||
-                !this.password2 || !this.birthday
+            if(!this.name || !this.surname || !this.username || !this.password ||
+                !this.password2 || !this.dateOfBirth
                 || !this.gender){
                 alert("Fill out all the fields")
                 e.preventDefault();
@@ -26,12 +26,12 @@ Vue.component("Register", {
                 alert("Passwords must match")
                 e.preventDefault();
             }else{
-                axios.post('/registration', { firstName: this.firstName,
-                        lastName: this.lastName,
+                axios.post('/registration', { name: this.name,
+                        surname: this.surname,
                         username : this.username,
                         password: this.password,
                         gender : this.gender,
-                        birthday : this.birthday
+                        dateOfBirth : this.dateOfBirth
                     })
                     .then(response => (	alert("You have successfully registered!")));
             }
@@ -88,43 +88,43 @@ Vue.component("Register", {
             </div>
             <div class="form-group row">
               <label
-                for="firstName"
+                for="name"
                 class="col-md-4 col-form-label text-md-right"
                 >First Name: </label>
               <div class="col-md-6">
                 <input
                   type="text"
-                  id="firstName"
+                  id="name"
                   class="form-control"
-                  name="firstName"
-                  v-model="firstName"/>
+                  name="name"
+                  v-model="name"/>
               </div>
             </div>
             <div class="form-group row">
               <label
-                for="lastName"
+                for="surname"
                 class="col-md-4 col-form-label text-md-right"
                 >Last Name: </label>
               <div class="col-md-6">
                 <input
                   type="text"
-                  id="lastName"
+                  id="surname"
                   class="form-control"
-                  name="lastName"
-                  v-model="lastName"/>
+                  name="surname"
+                  v-model="surname"/>
               </div>
             </div>
             <div class="form-group row">
             <label
-              for="birthday"
+              for="dateOfBirth"
               class="col-md-4 col-form-label text-md-right"
               >Date of birth: </label>
               <div class="col-md-6">
               <input 
-              v-model="birthday" 
+              v-model="dateOfBirth" 
               class="form-control form-control-user"
               type="date" 
-              name="birthday">
+              name="dateOfBirth">
               </div>
               </div>
           <div class="form-group row">
@@ -133,14 +133,14 @@ Vue.component("Register", {
                 class="col-md-4 col-form-label text-md-right"
                 >Gender</label>
               <div class="form-check">
-                <input class="form-check-input" type="radio" v-model="gender" value="male">
+                <input class="form-check-input" type="radio" v-model="gender" value="muski">
                           <label class="form-check-label" >
                             Male
                           </label>
                           </div>
               <label></label>
               <div class="form-check offset-md-1">
-                  <input class="form-check-input" type="radio" v-model="gender" value="female" >
+                  <input class="form-check-input" type="radio" v-model="gender" value="zenski" >
                   <label class="form-check-label">
                   Female
                 </label>

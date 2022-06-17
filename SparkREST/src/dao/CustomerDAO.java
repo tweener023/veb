@@ -34,11 +34,12 @@ public class CustomerDAO {
             e.printStackTrace();
         }
         
-//        try {
-//            writeAll();
-//        } catch(IOException e) {
-//            e.printStackTrace();
-//        }
+    //    try {
+     //      writeAll();
+     //   } catch(IOException e) {
+     //       e.printStackTrace();
+    //   }
+        
     }
     
     @SuppressWarnings("deprecation")
