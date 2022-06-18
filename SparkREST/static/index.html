@@ -1,92 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Health&Fitness</title>
-    <script src="jquery.min.js"></script>
-    <link href="css/style.css" rel="stylesheet" />
-    <link href="css/event-card.css" rel="stylesheet" />
-    <link href="css/rating-stars.css" rel="stylesheet" />
-    <link href="css/ol.css" rel="stylesheet" />
-    <link href="css/navbar.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sportski objekti</title>
+<script src="jquery.min.js"></script>
+<link rel="stylesheet" href="css/foundation.css">
 </head>
-<body style="background-color: #FDF5DF";>
+<body>
+	<!-- Navigation -->
+<div class="title-bar" data-responsive-toggle="realEstateMenu" data-hide-for="small">
+	<button class="menu-icon" type="button" data-toggle></button>
+	<div class="title-bar-title">Menu</div>
+  </div>
+  
+  <div class="top-bar" id="realEstateMenu">
+	<div class="top-bar-left">
+	  <ul class="menu" data-responsive-menu="accordion">
+		<li><a href="#/">Početna stranica</a></li>
+		<li><a href="#">Two</a></li>
+		<li><a href="#">Three</a></li>
+	  </ul>
+	</div>
+	<div class="top-bar-right">
+	  <ul class="menu">
+		<li><a href="#">Moj nalog</a></li>
+		<li><a class="button" href="#/login">Prijava/Registracija</a></li>
+	  </ul>
+	</div>
+  </div>
+  <!-- /Navigation -->
+  <div id="mainView">
+  	<router-view></router-view>
+  </div>
 
-<div id="app">
-    <div>
-    	<nav style="min-height:10vh; background-color:#383838" class="container-fluid navbar navbar-expand-md mb-4">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/">Home page</a>
-          </li>
-          <li v-if="activeUser == true && role =='admin'" class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/salesmanRegister">Register a salesman</a>
-          </li>
-          <li v-if="activeUser == true && role =='admin' " class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/adminUsers">View customers</a>
-          </li>
-          <li v-if="activeUser == true && role =='admin'" class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/adminSuspiciousUsers">Suspicious customers</a>
-          </li>
-          <li v-if="activeUser == true && (role =='admin' |  role =='prodavac')"  class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/adminEvents">View events</a>
-          </li>
-          <li v-if="activeUser == true && (role =='admin' | role =='prodavac')"  class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/tickets">Tickets</a>
-          </li>
-          <li v-if="activeUser == true && role =='prodavac' " class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/salesmanCutomer">View customers</a>
-          </li>
-          <li v-if="activeUser == true && role =='prodavac' " class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/approveComments">Comment approval</a>
-        </li>
-        <li v-if="activeUser == true && role =='kupac'"  class="nav-item active">
-            <a class="btn btn-outline-light mr-1" href="/#/ticketUser">Tickets</a>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav ml-auto" style="left: auto !important;
-        right: 0px;">
-            <li v-if="activeUser == true" class="nav-item active">
-                <a class="btn btn-outline-light mr-1" href="/#/profile">Profile</a>
-          </li>
-          <li v-if="activeUser == true" class="nav-item active">
-                <a class="btn btn-outline-light mr-1" href="/#/changePassword">Change password</a>
-          </li>
-            <li v-if="activeUser!=true" class="nav-item active right">
-                <a class="btn btn-outline-light mr-1" href="/#/reg">Register</a>
-            </li>
-            <li v-if="activeUser != true" class="nav-item active">
-                <a class="btn btn-outline-light mr-1" href="/#/login">Login</a>
-            </li>
-            <li v-if="activeUser == true"  class="nav-item active">
-                <button @click="logout" type="button" class="btn btn-outline-light mr-1">Logout</button>
-            </li>
-        </ul>
-        
-      
-  </nav>
-    </div>
-    <router-view></router-view>
-</div>
-
-<script src="js/vue.js"></script>
-<script src="js/vue-router.js"></script>
-<script src="js/axios.js"></script>
-<script src="js/jquery.min.js"></script>
-<script src="js/toast.js"></script>
-<script src="js/app.js"></script>
-
-<script src="components/Navbar.js"></script>
-<script src="components/Login.js"></script>
-<script src="components/Register.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+  	<script src="js/vue.js"></script>
+	<script src="js/vue-router.js"></script>
+	<script src="js/axios.js"></script>
+	<script src="components/loginAndRegistration.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>

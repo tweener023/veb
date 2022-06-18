@@ -1,15 +1,15 @@
-const Login = { template: "<login></login>" };
-const Register = { template: '<Register></Register>' };
+const Restaurants = { template: '<restaurants></restaurants>'}
+const LoginAndRegistration = { template: '<loginAndRegistration></loginAndRegistration>'}
 
 const router = new VueRouter({
-    mode: 'hash',
-    routes: [
-        { path: '/login', name: 'login', component: Login },
-        { path: '/reg', name: 'reg', component: Register }
-    ]
+	mode: 'hash',
+	  routes: [
+		{ path: '/', name: 'Početna', component: Restaurants},
+		{ path: '/login', name:'login', component:LoginAndRegistration}
+	  ]
 });
 
-const app = new Vue({
-    router,
-    el: '#app'
+var app = new Vue({
+	router,
+	el: '#mainView'
 });
