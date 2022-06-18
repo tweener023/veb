@@ -1,10 +1,13 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,91 +17,142 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import beans.Administrator;
 import beans.Customer;
 import beans.CustomerType;
 import beans.UserRole;
 import beans.Gender;
+import beans.Manager;
+import beans.Trainer;
+import beans.User;
 
 public class CustomerDAO {
-    private HashMap<String, Customer> customers;
-    private HashMap<String, CustomerType> customerTypes;
+	private String path = "./files/users.txt";
+	private HashMap<String, User> users = new HashMap<String, User>();
+	private HashMap<String, Customer> customers = new HashMap<String, Customer>();
+	private HashMap<String, Administrator> administrators = new HashMap<String, Administrator>();
+	private HashMap<String, Manager> managers = new HashMap<String, Manager>();
+	private HashMap<String, Trainer> trainers = new HashMap<String, Trainer>();
 
-    public CustomerDAO() {
-        customers = new HashMap<String, Customer>();
-        customerTypes = new HashMap<>();
-
-        try {
-            loadAll();
-            loadTypes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-    //    try {
-     //      writeAll();
-     //   } catch(IOException e) {
-     //       e.printStackTrace();
-    //   }
-        
-    }
-    
-    @SuppressWarnings("deprecation")
-	private void writeAll() throws IOException {
-        Customer c1 = new Customer();
-        c1.setUsername("c1");
-        c1.setPassword("123");
-        c1.setName("Mile");
-        c1.setSurname("Kitic");
-        c1.setGender(beans.Gender.muski);
-        c1.setDateOfBirth(new Date(1998, Calendar.JANUARY, 2));
-        c1.setRole(UserRole.kupac);
-        c1.setDeleted(false);
-        
-        Customer c2 = new Customer();
-        c2.setUsername("c2");
-        c2.setPassword("123");
-        c2.setName("Elena");
-        c2.setSurname("Kitic");
-        c2.setGender(beans.Gender.zenski);
-        c2.setDateOfBirth(new Date(1998, Calendar.JANUARY, 2));
-        c2.setRole(UserRole.kupac);
-        c2.setDeleted(false);
-        
-        customers.put("c1", c1);
-        customers.put("c2", c2);
-
-        Gson gson = new Gson();
-        FileWriter fw = new FileWriter("files/customers.json");
-        gson.toJson(this.customers, fw);
-        fw.flush();
-        fw.close();
-    }
-    
-    public void loadAll() throws FileNotFoundException {
-        Gson gson = new Gson();
-        Type token = new TypeToken<HashMap<String, Customer>>(){}.getType();
-        BufferedReader br = new BufferedReader(new FileReader("files/customers.json"));
-        this.customers = gson.fromJson(br, token);
-    }
-
-
-    private void loadTypes() throws FileNotFoundException {
-        Gson gson = new Gson();
-        Type token = new TypeToken<HashMap<String, CustomerType>>(){}.getType();
-        BufferedReader br = new BufferedReader(new FileReader("files/customer_types.json"));
-        this.customerTypes = gson.fromJson(br, token);
-    }
-    
-
-    public void addCustomer(Customer customer) {
-        customer.setPoints(0);
-        customers.put(customer.getUsername(), customer);
-
-        try {
-            this.writeAll();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
+	
+	public CustomerDAO() {
+		readUsers();
+	}
+	
+	public ArrayList<User> getUsers(){
+		return (ArrayList<User>) users.values();
+	}
+	
+	public User getUser(String username) {
+		return users.get(username);
+	}
+	
+	/*
+	 * Metoda ce prvo proveriti da li je zauzet prosledjeni username i ukoliko nije cuva novog korisnika
+	 */
+	public Customer registerCustomer(User user) {
+		if (users.containsKey(user.getUsername())) {
+			return null;
+		}
+		Customer newCustomer = new Customer(user);
+		newCustomer.setRole(UserRole.kupac);
+		return writeCustomer(newCustomer);
+	}
+	
+	/*
+	 * Metoda sluzi za ucitavanje svih entiteta iz txt fajla
+	 */
+	public void readUsers() {
+		BufferedReader in = null;
+		try {
+			File file = new File(path);
+			in = new BufferedReader(new FileReader(file));
+			String line;
+			
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if (line.equals(""))
+					continue;
+				
+				String[] data = line.split(",");
+				String id = data[0];
+				boolean deleted = Boolean.parseBoolean(data[1]);
+				String username = data[2];
+				String password = data[3];
+				String name = data[4];
+				String surname = data[5];
+				Gender gender = Gender.valueOf(data[6]);
+				Date dateOfBirth = new Date(Long.parseLong(data[7]));
+				UserRole role = UserRole.valueOf(data[8]);
+				
+				// ukolko je korisnik logicki obrisan
+				if (deleted) {
+					continue;
+				}
+				
+				User user = new User(id, deleted, username, password, name, surname, gender, dateOfBirth, role);
+				users.put(user.getUsername(), user);
+				
+				// formiranje konkretnih korisnika
+				if (role == UserRole.administrator) {
+					Administrator a = new Administrator(user);
+					administrators.put(a.getUsername(), a);
+				}
+				else if (role == UserRole.kupac) {
+					int pointsCollected = Integer.parseInt(data[9]);
+					Customer c = new Customer(user);
+					// TODO: KADA SE NAPRAVI BAZA ZA PORUDZBINE
+					//c.setAllOrders(new ArrayList<Order>);
+					// TODO: KADA SE RAZRADI LOGIKA ZA CUSTOMER TYPE ODRADITI
+					//c.setCustomerType(new CustomerType());
+					customers.put(c.getUsername(), c);
+				}
+				else if (role == UserRole.menadzer) {
+					//String restaurantId = data[9];
+					Manager m = new Manager(user);
+					// TODO : KADA SE NAPRAVI BAZA ZA RESTORANE ODRADITI
+					//m.setRestaurant(null);
+					managers.put(m.getUsername(), m);
+				}
+				else if (role == UserRole.trener) {
+					Trainer t = new Trainer(user);
+					// TODO : KADA SE NAPRAVI BAZA ZA ISPORUKE UCITATI KOJE ISPORUKE TREBA DA ISPORUCI
+					trainers.put(t.getUsername(), t);
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if ( in != null ) {
+				try {
+					in.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	/*
+	 * Metoda sluzi za upisivanje novog kupca u fajl
+	 */
+	private Customer writeCustomer(Customer customer) {
+		try (FileWriter f = new FileWriter(path, true);
+				BufferedWriter b = new BufferedWriter(f);
+				PrintWriter p = new PrintWriter(b);) {
+			p.println(customerToText(customer));
+			return customer;
+		} catch (IOException i) {
+			i.printStackTrace();
+			return null;
+		}
+	}
+	
+	private String customerToText(Customer customer) {
+		return customer.getId() + "," + customer.getUsername() + "," 
+				+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
+				+ customer.getGender() + "," + customer.getDateOfBirth().getTime() + "," 
+				+ customer.getRole() + ",";
+	}
+	
 }

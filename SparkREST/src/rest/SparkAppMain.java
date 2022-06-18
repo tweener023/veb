@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 
 import dao.CustomerDAO;
 import beans.Customer;
+import beans.User;
 
 public class SparkAppMain {
 	
@@ -29,13 +30,16 @@ public class SparkAppMain {
 		});
 		
 
-        post("/registration", (req, res) -> {
-            Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-
-            Customer customer = gsonReg.fromJson(req.body(), Customer.class);
-            customerDAO.addCustomer(customer);
-            return true;
-        });
+		post("rest/customers", (req, res) -> {
+			res.type("application/json");
+			String registrationParams = req.body();
+			User userToReg = g.fromJson(registrationParams, User.class);
+			Customer customer = customerDAO.registerCustomer(userToReg);
+			if (customer == null) {
+				return null;
+			}
+			return g.toJson(customer);	// ovo je 1 opcija, druga je da vrati objeakt user
+		});
     }
 	
 }
