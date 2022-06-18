@@ -15,11 +15,11 @@ public class Trainer extends User {
 		this.upcomingWorkouts = new ArrayList<HistoryOfTraining>();
 	}
 	
-	public ArrayList<HistoryOfTraining> getUpcmonigWorkouts() {
+	public ArrayList<HistoryOfTraining> getUpcomingWorkouts() {
 		return upcomingWorkouts;
 	}
 	
-	public void setUpcomingWokrouts(ArrayList<HistoryOfTraining> upcomingWorkouts) {
+	public void setUpcomingWorkouts(ArrayList<HistoryOfTraining> upcomingWorkouts) {
 		this.upcomingWorkouts= upcomingWorkouts;
 	}
 }

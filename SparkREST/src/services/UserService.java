@@ -1,6 +1,8 @@
 package services;
 
 import beans.Customer;
+import beans.Manager;
+import beans.Trainer;
 import beans.User;
 import fileRepository.UserFileRepository;
 
@@ -22,5 +24,13 @@ public class UserService {
 	
 	public Customer registerCustomer(User user) {
 		return userRepository.registerCustomer(user);
+	}
+	
+	public Manager registerManager(Manager manager) {
+		return userRepository.registerManager(manager);
+	}
+	
+	public Trainer registerTrainer(Trainer trainer) {
+		return userRepository.registerTrainer(trainer);
 	}
 }

@@ -14,8 +14,10 @@ import java.util.HashMap;
 import beans.Administrator;
 import beans.Customer;
 import beans.Gender;
+import beans.HistoryOfTraining;
 import beans.Manager;
 import beans.UserRole;
+import beans.Workout;
 import beans.Trainer;
 import beans.User;
 
@@ -145,6 +147,31 @@ public class UserFileRepository {
 			return null;
 		}
 	}
+
+	public Manager registerManager(Manager manager) {
+		readUsers();
+		manager.setRole(UserRole.menadzer);
+		if (users.containsKey(manager.getUsername())){
+			return null;
+		}
+		if (writeUser(managerToText(manager), true)) {
+			return manager;
+		}
+		return null;
+	}
+	
+	
+	public Trainer registerTrainer(Trainer trainer) {
+		readUsers();
+		trainer.setRole(UserRole.trener);
+		if (users.containsKey(trainer.getUsername())) {
+			return null;
+		}
+		if (writeUser(trainerToText(trainer), true)) {
+			return trainer;
+		}
+		return null;
+	}
 	
 	private String customerToText(Customer customer) {
 		return customer.getId() + ","  + customer.getUsername() + "," 
@@ -152,4 +179,47 @@ public class UserFileRepository {
 				+ customer.getGender() + "," + customer.getDateOfBirth().getTime() + "," 
 				+ customer.getRole() + "," ;
 	}
+
+	private String managerToText(Manager manager) {
+		StringBuilder managerString = new StringBuilder("");
+		managerString.append(manager.getId() + "," + manager.getUsername() + "," 
+				+ manager.getPassword() + "," + manager.getName() + "," + manager.getSurname() + "," 
+				+ manager.getGender() + "," + manager.getDateOfBirth().getTime() + "," 
+				+ manager.getRole() + ",");
+		if (manager.getSportObject() == null) {
+			managerString.append("-1");
+		}else {
+			managerString.append(manager.getSportObject().getId());
+		}
+		return managerString.toString();
+	}
+	
+	private String trainerToText(Trainer trainer) {
+		StringBuilder trainerString = new StringBuilder("");
+		trainerString.append(trainer.getId() + "," + trainer.getUsername() + "," 
+				+ trainer.getPassword() + "," + trainer.getName() + "," + trainer.getSurname() + "," 
+				+ trainer.getGender() + "," + trainer.getDateOfBirth().getTime() + "," 
+				+ trainer.getRole() + ",");
+		for (HistoryOfTraining o : trainer.getUpcomingWorkouts()) {
+			trainerString.append(o.getStartOfWorkout());
+			trainerString.append(";");
+		}
+		return trainerString.toString();
+	}
+	/*
+	 * Metoda sluzi za upisivanje novog korisnika u fajl. Drugi parametar sluzi da kaze da li se
+	 * fajl iznova pise ili se dodaje novi red
+	 */
+	private boolean writeUser(String userToWrite, boolean append) {
+		try (FileWriter f = new FileWriter(path, append);
+				BufferedWriter b = new BufferedWriter(f);
+				PrintWriter p = new PrintWriter(b);) {
+			p.println(userToWrite);
+			return true;
+		} catch (IOException i) {
+			i.printStackTrace();
+			return false;
+		}
+	}
+	
 }
