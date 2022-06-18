@@ -40,6 +40,7 @@ public class SparkAppMain {
 					res.type("application/json");
 					String registrationParams = req.body();
 					User userToReg = g.fromJson(registrationParams, User.class);
+					System.out.println("user je "+ userToReg);
 					Customer customer = userService.registerCustomer(userToReg);
 					if (customer == null) {
 						return null;

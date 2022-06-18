@@ -80,7 +80,7 @@ public class UserFileRepository {
 				String name = data[4];
 				String surname = data[5];
 				Gender gender = Gender.valueOf(data[6]);
-				Date dateOfBirth = new Date(Long.parseLong(data[7]));
+				String dateOfBirth = data[7];
 				UserRole role = UserRole.valueOf(data[8]);
 				
 				// ukolko je korisnik logicki obrisan
@@ -176,7 +176,7 @@ public class UserFileRepository {
 	private String customerToText(Customer customer) {
 		return customer.getId() + ","  + customer.getUsername() + "," 
 				+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
-				+ customer.getGender() + "," + customer.getDateOfBirth().getTime() + "," 
+				+ customer.getGender() + "," + customer.getDateOfBirth() + "," 
 				+ customer.getRole() + "," ;
 	}
 
@@ -184,7 +184,7 @@ public class UserFileRepository {
 		StringBuilder managerString = new StringBuilder("");
 		managerString.append(manager.getId() + "," + manager.getUsername() + "," 
 				+ manager.getPassword() + "," + manager.getName() + "," + manager.getSurname() + "," 
-				+ manager.getGender() + "," + manager.getDateOfBirth().getTime() + "," 
+				+ manager.getGender() + "," + manager.getDateOfBirth() + "," 
 				+ manager.getRole() + ",");
 		if (manager.getSportObject() == null) {
 			managerString.append("-1");
@@ -198,7 +198,7 @@ public class UserFileRepository {
 		StringBuilder trainerString = new StringBuilder("");
 		trainerString.append(trainer.getId() + "," + trainer.getUsername() + "," 
 				+ trainer.getPassword() + "," + trainer.getName() + "," + trainer.getSurname() + "," 
-				+ trainer.getGender() + "," + trainer.getDateOfBirth().getTime() + "," 
+				+ trainer.getGender() + "," + trainer.getDateOfBirth()+ "," 
 				+ trainer.getRole() + ",");
 		for (HistoryOfTraining o : trainer.getUpcomingWorkouts()) {
 			trainerString.append(o.getStartOfWorkout());
