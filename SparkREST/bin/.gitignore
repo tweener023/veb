@@ -4,3 +4,5 @@
 /rest/
 /services/
 /dao/
+/fileRepository/
+/gsonAdapters/

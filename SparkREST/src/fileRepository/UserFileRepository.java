@@ -1,41 +1,37 @@
-package dao;
+package fileRepository;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import beans.Administrator;
 import beans.Customer;
-import beans.CustomerType;
-import beans.UserRole;
 import beans.Gender;
 import beans.Manager;
+import beans.UserRole;
 import beans.Trainer;
 import beans.User;
 
-public class CustomerDAO {
+/**
+ * Klasa koja služi da interaguje sa trajnim skladištem za korisnike.
+ */
+public class UserFileRepository {
+
 	private String path = "./files/users.txt";
 	private HashMap<String, User> users = new HashMap<String, User>();
 	private HashMap<String, Customer> customers = new HashMap<String, Customer>();
 	private HashMap<String, Administrator> administrators = new HashMap<String, Administrator>();
-	private HashMap<String, Manager> managers = new HashMap<String, Manager>();
 	private HashMap<String, Trainer> trainers = new HashMap<String, Trainer>();
-
+	private HashMap<String, Manager> managers = new HashMap<String, Manager>();
 	
-	public CustomerDAO() {
+	public UserFileRepository() {
 		readUsers();
 	}
 	
@@ -103,6 +99,8 @@ public class CustomerDAO {
 					Customer c = new Customer(user);
 					// TODO: KADA SE NAPRAVI BAZA ZA PORUDZBINE
 					//c.setAllOrders(new ArrayList<Order>);
+					//c.setShoppingCart(new ShoppingCart());
+					//c.setPointsCollected(pointsCo;llected)
 					// TODO: KADA SE RAZRADI LOGIKA ZA CUSTOMER TYPE ODRADITI
 					//c.setCustomerType(new CustomerType());
 					customers.put(c.getUsername(), c);
@@ -149,10 +147,9 @@ public class CustomerDAO {
 	}
 	
 	private String customerToText(Customer customer) {
-		return customer.getId() + "," + customer.getUsername() + "," 
+		return customer.getId() + ","  + customer.getUsername() + "," 
 				+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
 				+ customer.getGender() + "," + customer.getDateOfBirth().getTime() + "," 
-				+ customer.getRole() + ",";
+				+ customer.getRole() + "," ;
 	}
-	
 }
