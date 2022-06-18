@@ -20,6 +20,7 @@ import beans.UserRole;
 import beans.Workout;
 import beans.Trainer;
 import beans.User;
+import beans.SportObject;
 
 /**
  * Klasa koja služi da interaguje sa trajnim skladištem za korisnike.
@@ -101,8 +102,8 @@ public class UserFileRepository {
 					Customer c = new Customer(user);
 					// TODO: KADA SE NAPRAVI BAZA ZA PORUDZBINE
 					//c.setAllOrders(new ArrayList<Order>);
-					//c.setShoppingCart(new ShoppingCart());
-					//c.setPointsCollected(pointsCo;llected)
+					c.setWasIn(new ArrayList<SportObject>());
+					c.setPoints(pointsCollected);
 					// TODO: KADA SE RAZRADI LOGIKA ZA CUSTOMER TYPE ODRADITI
 					//c.setCustomerType(new CustomerType());
 					customers.put(c.getUsername(), c);
