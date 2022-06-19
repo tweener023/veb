@@ -6,7 +6,7 @@ Vue.component("restaurants", {
 	},
 	template: ` 
 <div>
-	<p>Ovde će biti prikaz restorana {{polje}}.</p>
+	<p>Ovde će biti prikaz sportskih objekata {{polje}}.</p>
 </div>		  
 `
 	, 

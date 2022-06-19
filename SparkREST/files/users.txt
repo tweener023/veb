@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-038c086b-316b-436a-9fa4-e9a42a792d9b,satara,nikolaj,nikolaj,satara,zenski,1654608840000,kupac,
-03e1a22d-442c-45d9-bf20-cd51efd659a5,satara,nikolaj,nikolaj,satara,zenski,1654608840000,kupac,
-d667f638-49ad-4f69-8548-a5da1b74d972,satara1111,nikolaj,nikolaj,satara,zenski,1654608840000,kupac,
-=======
-5b353a9a-ddbb-476a-8e49-a1f6db362607,satara,123,nikolaj,satara,muski,Wed Jun 08 14:55:00 CEST 2022,kupac,
->>>>>>> Stashed changes
+37f8ae3a-f390-403d-8b3f-6d3fc83449ee,andjelka,123,andjelka,nekaandjelka,muski,Tue Jun 07 17:01:00 CEST 2022,kupac,
+be907d65-b7d6-4c1a-b79f-6364159d02cc,andjelka18,123,andjelka,nekaandjelka,muski,Tue Jun 07 17:01:00 CEST 2022,kupac,
+f9769579-31cb-4403-815a-cbf1412f4466,pera,123,pera,pera,muski,Tue Jun 07 17:18:00 CEST 2022,kupac,
+6f80b2ab-639a-4e57-837a-8f82b1bb80a0,satara,123,satara,satara,muski,Mon Jun 06 17:22:00 CEST 2022,kupac,

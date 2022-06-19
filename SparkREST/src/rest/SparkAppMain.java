@@ -17,6 +17,7 @@ import gsonAdapters.DateAdapter;
 import services.SportObjectService;
 import services.UserService;
 import services.WorkoutService;
+import spark.Session;
 import beans.Customer;
 import beans.SportObject;
 import beans.User;
@@ -99,6 +100,35 @@ public class SparkAppMain {
 					String id = newSportObject.getId();
 					return g.toJson(sportObjectService.changeSportObject(id, newSportObject));
 				});
+				
+				// http://localhost:8080/login
+				post("rest/login", (req, res) -> {
+					res.type("application/json");
+					Session ss = req.session(true);
+					User userToLogIn = g.fromJson(req.body(), User.class);
+					String username = userToLogIn.getUsername();
+					String password = userToLogIn.getPassword();
+					Object user = userService.findUser(username, password);
+					if (user == null) {
+						return null;
+					} else {
+						ss.attribute("user", user);
+					}
+					return g.toJson(user);
+				});
+
+				get("rest/getLoggedUser", (req, res) -> {
+					res.type("application/json");
+					Session ss = req.session(true);
+					User user = (User) ss.attribute("user");
+					if (user == null) {
+						return null;
+					} else {
+						Object retUser = userService.findUser(user.getUsername(), user.getPassword());
+						return g.toJson(retUser);
+					}
+				});
+
 	}
 	
 }

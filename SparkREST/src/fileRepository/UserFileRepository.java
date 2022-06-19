@@ -107,15 +107,14 @@ public class UserFileRepository {
 		ArrayList<String> lines = readLines();
 		for (String line : lines) {
 			String[] data = line.split(",");
-			String username = data[0];
-			String password = data[1];
-			String name = data[2];
-			String surname = data[3];
-			Gender gender = Gender.valueOf(data[4]);
-			Date dateOfBirth = new Date(Long.parseLong(data[5]));
-			UserRole role = UserRole.valueOf(data[6]);
-			
-			// ukolko je korisnik logicki obrisan
+			String id = data[0];
+			String username = data[1];
+			String password = data[2];
+			String name = data[3];
+			String surname = data[4];
+			Gender gender = Gender.valueOf(data[5]);
+			Date dateOfBirth = new Date();
+			UserRole role = UserRole.valueOf(data[7]);
 		
 			User user = new User(username, password, name, surname, gender, dateOfBirth, role);
 			users.put(user.getUsername(), user);
@@ -126,7 +125,7 @@ public class UserFileRepository {
 				administrators.put(a.getUsername(), a);
 			}
 			else if (role == UserRole.kupac) {
-				int pointsCollected = Integer.parseInt(data[10]);
+			//	int pointsCollected = Integer.parseInt(data[10]);
 				String ordersText = "";
 				Customer c = new Customer(user);
 				/*
