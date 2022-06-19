@@ -18,6 +18,7 @@ import beans.HistoryOfTraining;
 import beans.Manager;
 import beans.UserRole;
 import beans.Workout;
+import services.WorkoutService;
 import beans.Trainer;
 import beans.User;
 import beans.SportObject;
@@ -35,33 +36,130 @@ public class UserFileRepository {
 	private HashMap<String, Manager> managers = new HashMap<String, Manager>();
 	
 	public UserFileRepository() {
+	}
+
+	public Iterable<Object> getUsers(){
 		readUsers();
+		ArrayList<Object> users = new ArrayList<Object>();
+		users.addAll(administrators.values());
+		users.addAll(customers.values());
+		users.addAll(trainers.values());
+		users.addAll(managers.values());
+		return users;
 	}
 	
-	public ArrayList<User> getUsers(){
-		return (ArrayList<User>) users.values();
+	public Iterable<Manager> getManagers(){
+		readUsers();
+		return managers.values();
+	}
+	
+	public Iterable<Customer> getCustomers() {
+		readUsers();
+		return customers.values();
 	}
 	
 	public User getUser(String username) {
+		readUsers();
 		return users.get(username);
 	}
+	
+	//**********Ne radi se ponovno ucitavanje podataka jer se ovo uvek poziva odmah nakog getUser//
+	public Customer getCustomer(String username) {
+		return customers.get(username);
+	}
+	
+	public Manager getManager(String username) {
+		return managers.get(username);
+	}
+	
+	public Trainer getTrainer(String username) {
+		return trainers.get(username);
+	}
+	
+	public Administrator getAdministrator(String username) {
+		return administrators.get(username);
+	}
+	//**********//
 	
 	/*
 	 * Metoda ce prvo proveriti da li je zauzet prosledjeni username i ukoliko nije cuva novog korisnika
 	 */
 	public Customer registerCustomer(User user) {
+		readUsers();
 		if (users.containsKey(user.getUsername())) {
-			return null;
+			Customer c = new Customer();
+			c.setUsername("-1");	// ako je username zauzet vrati -1 u tom polju
+			return c;
 		}
 		Customer newCustomer = new Customer(user);
 		newCustomer.setRole(UserRole.kupac);
-		return writeCustomer(newCustomer);
+		if (writeUser(customerToText(newCustomer), true)) {
+			return newCustomer;
+		}
+		return null;
 	}
 	
 	/*
 	 * Metoda sluzi za ucitavanje svih entiteta iz txt fajla
 	 */
 	public void readUsers() {
+		clearHashMaps();
+		ArrayList<String> lines = readLines();
+		for (String line : lines) {
+			String[] data = line.split(",");
+			String username = data[0];
+			String password = data[1];
+			String name = data[2];
+			String surname = data[3];
+			Gender gender = Gender.valueOf(data[4]);
+			Date dateOfBirth = new Date(Long.parseLong(data[5]));
+			UserRole role = UserRole.valueOf(data[6]);
+			
+			// ukolko je korisnik logicki obrisan
+		
+			User user = new User(username, password, name, surname, gender, dateOfBirth, role);
+			users.put(user.getUsername(), user);
+			
+			// formiranje konkretnih korisnika
+			if (role == UserRole.administrator) {
+				Administrator a = new Administrator(user);
+				administrators.put(a.getUsername(), a);
+			}
+			else if (role == UserRole.kupac) {
+				int pointsCollected = Integer.parseInt(data[10]);
+				String ordersText = "";
+				Customer c = new Customer(user);
+				/*
+				try {
+					ordersText = data[11];
+					if (ordersText != null && ordersText != "") {
+						String[] idsOfOrders = ordersText.split(";");
+						WorkoutService os = new WorkoutService();
+						for (String orderId : idsOfOrders) {
+							c.get().add(os.getOrder(orderId));
+						}
+					}
+				} catch(Exception e) {
+					
+				}
+				ShoppingCartService scService = new ShoppingCartService();
+				ShoppingCart sc = scService.getShoppingCartOfUser(id);
+				if (sc == null) {
+					sc = new ShoppingCart();
+					sc.setCustomerId(id);
+				}
+				c.setShoppingCart(sc);
+				c.setPointsCollected(pointsCollected);
+				CustomerTypeService typeService = new CustomerTypeService();
+				c.setType(typeService.getAppropriateCustomerType(pointsCollected));
+				*/
+				customers.put(c.getUsername(), c);
+			}
+		}
+	}
+
+	private ArrayList<String> readLines() {
+		ArrayList<String> lines = new ArrayList<>();
 		BufferedReader in = null;
 		try {
 			File file = new File(path);
@@ -73,53 +171,7 @@ public class UserFileRepository {
 				if (line.equals(""))
 					continue;
 				
-				String[] data = line.split(",");
-				String id = data[0];
-				boolean deleted = Boolean.parseBoolean(data[1]);
-				String username = data[2];
-				String password = data[3];
-				String name = data[4];
-				String surname = data[5];
-				Gender gender = Gender.valueOf(data[6]);
-				String dateOfBirth = data[7];
-				UserRole role = UserRole.valueOf(data[8]);
-				
-				// ukolko je korisnik logicki obrisan
-				if (deleted) {
-					continue;
-				}
-				
-				User user = new User(id, deleted, username, password, name, surname, gender, dateOfBirth, role);
-				users.put(user.getUsername(), user);
-				
-				// formiranje konkretnih korisnika
-				if (role == UserRole.administrator) {
-					Administrator a = new Administrator(user);
-					administrators.put(a.getUsername(), a);
-				}
-				else if (role == UserRole.kupac) {
-					int pointsCollected = Integer.parseInt(data[9]);
-					Customer c = new Customer(user);
-					// TODO: KADA SE NAPRAVI BAZA ZA PORUDZBINE
-					//c.setAllOrders(new ArrayList<Order>);
-					c.setWasIn(new ArrayList<SportObject>());
-					c.setPoints(pointsCollected);
-					// TODO: KADA SE RAZRADI LOGIKA ZA CUSTOMER TYPE ODRADITI
-					//c.setCustomerType(new CustomerType());
-					customers.put(c.getUsername(), c);
-				}
-				else if (role == UserRole.menadzer) {
-					//String restaurantId = data[9];
-					Manager m = new Manager(user);
-					// TODO : KADA SE NAPRAVI BAZA ZA RESTORANE ODRADITI
-					//m.setRestaurant(null);
-					managers.put(m.getUsername(), m);
-				}
-				else if (role == UserRole.trener) {
-					Trainer t = new Trainer(user);
-					// TODO : KADA SE NAPRAVI BAZA ZA ISPORUKE UCITATI KOJE ISPORUKE TREBA DA ISPORUCI
-					trainers.put(t.getUsername(), t);
-				}
+				lines.add(line);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -132,8 +184,16 @@ public class UserFileRepository {
 				catch (Exception e) { }
 			}
 		}
+		return lines;
 	}
-	
+
+	private void clearHashMaps() {
+		users.clear();
+		customers.clear();
+		administrators.clear();
+		trainers.clear();
+		managers.clear();
+	}
 	/*
 	 * Metoda sluzi za upisivanje novog kupca u fajl
 	 */
@@ -149,31 +209,6 @@ public class UserFileRepository {
 		}
 	}
 
-	public Manager registerManager(Manager manager) {
-		readUsers();
-		manager.setRole(UserRole.menadzer);
-		if (users.containsKey(manager.getUsername())){
-			return null;
-		}
-		if (writeUser(managerToText(manager), true)) {
-			return manager;
-		}
-		return null;
-	}
-	
-	
-	public Trainer registerTrainer(Trainer trainer) {
-		readUsers();
-		trainer.setRole(UserRole.trener);
-		if (users.containsKey(trainer.getUsername())) {
-			return null;
-		}
-		if (writeUser(trainerToText(trainer), true)) {
-			return trainer;
-		}
-		return null;
-	}
-	
 	private String customerToText(Customer customer) {
 		return customer.getId() + ","  + customer.getUsername() + "," 
 				+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
@@ -221,6 +256,16 @@ public class UserFileRepository {
 			i.printStackTrace();
 			return false;
 		}
+	}
+
+	public Manager registerManager(Manager manager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Trainer registerTrainer(Trainer trainer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

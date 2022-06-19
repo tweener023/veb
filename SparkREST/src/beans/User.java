@@ -10,7 +10,7 @@ public class User {
 	private String name;
 	private String surname;
 	private Gender gender;
-	private String dateOfBirth;
+	private Date dateOfBirth;
 	private UserRole role;
 	private boolean deleted;
 	
@@ -19,7 +19,7 @@ public class User {
 		this.deleted = false;
 	}
 	
-	public User(String username, String password, String name, String surname, Gender gender, String dateOfBirth,
+	public User(String username, String password, String name, String surname, Gender gender, Date dateOfBirth,
 			UserRole role) {
 		super();
 		this.id = UUID.randomUUID().toString();
@@ -34,7 +34,7 @@ public class User {
 	}
 	
 	public User(String id, boolean deleted, String username, String password, String name, String surname, Gender gender,
-			String dateOfBirth, UserRole role) {
+			Date dateOfBirth, UserRole role) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -116,11 +116,11 @@ public class User {
 		this.gender = gender;
 	}
 	
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 	
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	

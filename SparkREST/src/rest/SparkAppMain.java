@@ -43,18 +43,18 @@ public class SparkAppMain {
 		});
 		
 
-		// REGISTRACIJA kupca
+		// Registracija korisnika
 				post("rest/customers", (req, res) -> {
 					res.type("application/json");
 					String registrationParams = req.body();
 					User userToReg = g.fromJson(registrationParams, User.class);
-					System.out.println("user je "+ userToReg);
 					Customer customer = userService.registerCustomer(userToReg);
 					if (customer == null) {
 						return null;
 					}
-					return g.toJson(customer);	// ovo je 1 opcija, druga je da vrati objeakt user
+					return g.toJson(customer);
 				});
+
 				
 				post("rest/workout", (req, res) -> {
 					res.type("application.json");
