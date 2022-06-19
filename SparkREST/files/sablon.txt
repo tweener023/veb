@@ -1,0 +1,41 @@
+<div style="margin: 10px;">
+		<form @submit='search'>
+			<table bgcolor="lightblue">
+				<tr>
+					<td><b>Pretraga</b></th>
+				</tr>
+				<tr>
+					<td><input type="text" placeholder="Naziv" v-model="name"></td>
+					<td>
+						<select v-model="type">
+							<option value="">Tip</option>
+							<option value="teretana">Teretana</option>
+							<option value="bazen">Bazen</option>
+							<option value="sportski_centar">Sportski centar</option>
+							<option value="plesni_studio">Plesni studio</option>
+						</select>
+					</td>
+					<td><input type="text" placeholder="Lokacija(grad)" v-model="adress"></td>
+					<td>
+						<select v-model="avgGrade">
+							<option value="">Prosecna ocena</option>
+							<option value="1">0-1</option>
+							<option value="2">1-2</option>
+							<option value="3">2-3</option>
+							<option value="4">3-4</option>
+							<option value="5">4-5</option>
+						</select>
+					</td>
+					<td>
+						<select v-model="status">
+							<option value="">Status</option>
+							<option value="radi">Radi</option>
+							<option value="ne_radi">Ne radi</option>
+						</select>
+					</td>
+					
+					<td><input type="submit" value="Pretrazi"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
