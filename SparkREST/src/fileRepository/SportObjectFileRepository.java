@@ -37,8 +37,7 @@ public class SportObjectFileRepository {
 			in = new BufferedReader(new FileReader(new File(fileLocation)));
 			while ((line = in.readLine()) != null) {
 				SportObject sportObject = makeSportObjectFromLine(line);
-				if(!sportObject.getDeleted())
-					sportObjects.put(sportObject.getId(), sportObject);
+				sportObjects.put(sportObject.getId(), sportObject);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -54,16 +53,69 @@ public class SportObjectFileRepository {
 		return sportObjects;
 	}
 	
-	public boolean saveSportObject(SportObject sportObject) {
+	public SportObject saveSportObject(SportObject sportObject) {
 		try(FileWriter f = new FileWriter(fileLocation, true);
 				BufferedWriter b = new BufferedWriter(f);
 				PrintWriter p = new PrintWriter(b);) {
 			p.println(getStringFromSportObject(sportObject));
-			return true;
+			return sportObject;
 		} catch (IOException i) {
 			i.printStackTrace();
-			return false;
+			return null;
 		}
+	}
+	
+	public SportObject changeSportObject(String id, SportObject newSportObject) {
+		HashMap<String, SportObject> sportObjects = this.getAllSportObjects();
+		
+		SportObject oldSportObject = sportObjects.get(id);
+		sportObjects.replace(id, oldSportObject, newSportObject);
+		writeAllSportObjectsInFile(sportObjects);
+		
+		return newSportObject;
+	}
+	
+	public SportObject deleteSportObject(String id) {
+		HashMap<String, SportObject> sportObjects = this.getAllSportObjects();
+		
+		SportObject sportObjectForDeleting = sportObjects.get(id);
+		sportObjectForDeleting.setDeleted(true);
+		
+		writeAllSportObjectsInFile(sportObjects);
+		
+		return sportObjectForDeleting;
+	}
+	
+	private void writeAllSportObjectsInFile(HashMap<String, SportObject> sportObjects) {
+		FileWriter fileWriter = null;
+		ArrayList<String> sportObjectsForWriting = getAllSportObjectsForWriting(sportObjects);
+		try {
+			fileWriter = new FileWriter(fileLocation);
+			for(String sportObject : sportObjectsForWriting) {
+				fileWriter.write(sportObject);
+				fileWriter.write("\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(fileWriter != null) {
+				try {
+					fileWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private ArrayList<String> getAllSportObjectsForWriting(HashMap<String, SportObject> sportObjects){
+		ArrayList<String> sportObjectsForWriting = new ArrayList<String>();
+		
+		for(SportObject sportObject : sportObjects.values()) {
+			sportObjectsForWriting.add(this.getStringFromSportObject(sportObject));
+		}
+		
+		return sportObjectsForWriting;
 	}
 	
 	private String getStringFromSportObject(SportObject sportObject) {
