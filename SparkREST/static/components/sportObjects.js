@@ -2,24 +2,21 @@ Vue.component("sportObjects", {
 	data: function () {
 		    return {
 				allSportObjects : {},
-				sportObjectsToShow : {},
+				sportObjectsToShow: {},
 				name : '',
 				type : '',
 				adress : '',
-				avgGrade : '',
-				status : ''
+				avgGrade : ''
 		    }
 	},
 	template: `
+	<div>
 	<div style="margin: 10px;">
+	<div>
 		<form @submit='search'>
 			<table bgcolor="lightblue">
 				<tr>
-					<th></th>
-					<th></th>
-					<th>Pretraga</th>
-				</tr>
-				<tr>
+					<td><b>Pretraga: </b></td>
 					<td><input type="text" placeholder="Naziv" v-model="name"></td>
 					<td>
 						<select v-model="type">
@@ -41,20 +38,14 @@ Vue.component("sportObjects", {
 							<option value="5.00">4-5</option>
 						</select>
 					</td>
-					<td>
-						<select v-model="status">
-							<option value="">Status</option>
-							<option value="radi">Radi</option>
-							<option value="ne_radi">Ne radi</option>
-						</select>
-					</td>
-					
-					<td><input type="submit" value="Pretraži"></td>
+					<td><input type="submit" value="Pretrazi"></td>
 				</tr>
 			</table>
-		</form> 
+		</form>
+	</div>
+	<div>
 		<table>
-			<tr v-for="so in allSportObjects">
+			<tr v-for="so in sportObjectsToShow">
 				<td style="width: 2500px">
 					<div style="border-style: dotted; max-width: 50%; margin: 10px;">
 						<table>
@@ -93,6 +84,7 @@ Vue.component("sportObjects", {
 			</tr>
 		</table>
 	</div>
+	</div>
 `
 	, 
 	mounted () {
@@ -105,11 +97,22 @@ Vue.component("sportObjects", {
 			.get('rest/sportObjects')
 			.then(res => {
 				this.allSportObjects = res.data;
-				alert();
+				this.sportObjectsToShow = res.data;
 			})
 		},
-		search : function () {
-			
+		search : function (event) {
+			alert("dugme je kliknuto");
+			event.preventDefault();
+			let filteredSportObjects = [];
+			for(sportObject of this.allSportObjects) {
+				if (sportObject.name.toLowerCase().includes(this.name.toLowerCase()) &&
+					(sportObject.type == this.type || this.type == '') &&
+					sportObject.location.adress.city.toLowerCase().includes(this.adress.toLowerCase()) &&
+					(((this.avgGrade - 1) <= sportObject.avgGrade && this.avgGrade >= sportObject.avgGrade) || this.avgGrade == '')){
+						filteredSportObjects.push(sportObject);
+					}
+			}
+			this.sportObjectsToShow = filteredSportObjects;
 		}
 	}
     
