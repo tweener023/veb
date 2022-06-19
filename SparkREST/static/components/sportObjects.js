@@ -104,10 +104,12 @@ Vue.component("sportObjects", {
 			axios
 			.get('rest/sportObjects')
 			.then(res => {
-				this.getAllSportObjects = res.data;
+				this.allSportObjects = res.data;
+				alert();
 			})
 		},
 		search : function () {
+			
 		}
 	}
     
