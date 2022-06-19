@@ -4,6 +4,8 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
+import static spark.Spark.delete;
+import static spark.Spark.put;
 
 import java.io.File;
 import java.util.Date;
@@ -57,29 +59,45 @@ public class SparkAppMain {
 				post("rest/workout", (req, res) -> {
 					res.type("application.json");
 					Workout workout = g.fromJson(req.body(), Workout.class);
-					boolean save = workoutService.saveWorkout(workout);
-					if(save)
-						return "Uspeh";
-					else
-						return null;
+					return workoutService.saveWorkout(workout);
 				});
 				
-				get("rest/items", (req, res) -> {
+				get("rest/workouts", (req, res) -> {
 					return g.toJson(workoutService.getAllWorkouts());
 				});
 				
-				post("rest/sportObjects", (req, res) -> {
+				delete("rest/workouts/:id", (req, res) -> {
 					res.type("application/json");
-					SportObject sportObject = g.fromJson(req.body(), SportObject.class);
-					boolean save = sportObjectService.saveSportObject(sportObject);
-					if(save)
-						return "Uspeh";
-					else
-						return null;
+					return g.toJson(workoutService.deleteWorkout(req.params(":id")));
 				});
 				
-				get("rest/sportObject", (req, res) -> {
+				put("rest/workouts", (req, res) -> {
+					res.type("application/json");
+					Workout newWorkout = g.fromJson(req.body(), Workout.class);
+					String id = newWorkout.getId();
+					return g.toJson(workoutService.changeWorkout(id, newWorkout));
+				});
+				
+				post("rest/sportObject", (req, res) -> {
+					res.type("application/json");
+					SportObject sportObject = g.fromJson(req.body(), SportObject.class);
+					return g.toJson(sportObjectService.saveSportObject(sportObject));
+				});
+				
+				get("rest/sportObjects", (req, res) -> {
 					return g.toJson(sportObjectService.getAllSportObjects());
+				});
+				
+				delete("rest/sportObjects/:id", (req, res) -> {
+					res.type("application/json");
+					return g.toJson(sportObjectService.deleteSportObject(req.params(":id")));
+				});
+				
+				put("rest/sportObjects", (req, res) -> {
+					res.type("application/json");
+					SportObject newSportObject = g.fromJson(req.body(), SportObject.class);
+					String id = newSportObject.getId();
+					return g.toJson(sportObjectService.changeSportObject(id, newSportObject));
 				});
 	}
 	

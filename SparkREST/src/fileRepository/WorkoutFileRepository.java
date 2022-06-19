@@ -3,6 +3,7 @@ package fileRepository;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileReader;
@@ -30,8 +31,7 @@ public class WorkoutFileRepository {
 			in = new BufferedReader(new FileReader(new File(fileLocation)));
 			while((line = in.readLine()) != null) {
 				Workout workout = makeWorkoutFromLine(line.trim());
-				if(!workout.getDeleted())
-					workouts.put(workout.getId(), workout);
+				workouts.put(workout.getId(), workout);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,16 +47,69 @@ public class WorkoutFileRepository {
 		return workouts;
 	}
 	
-	public boolean saveWorkout(Workout workout) {
+	public Workout saveWorkout(Workout workout) {
 		try(FileWriter f = new FileWriter(fileLocation, true);
 				BufferedWriter b = new BufferedWriter(f);
 				PrintWriter p = new PrintWriter(b);) {
 			p.println(getStringFromWorkout(workout));
-			return true;
+			return workout;
 		} catch (IOException i) {
 			i.printStackTrace();
-			return false;
+			return null;
 		}
+	}
+	
+	public Workout deleteWotkout(String id) {
+		HashMap<String, Workout> workouts = this.getAllWorkouts();
+		
+		Workout workoutForDeleting = workouts.get(id);
+		workoutForDeleting.setDeleted(true);
+		
+		writeAllWorkoutsInFile(workouts);
+		
+		return null;
+	}
+	
+	private void writeAllWorkoutsInFile(HashMap<String, Workout> workouts) {
+		FileWriter fileWriter = null;
+		ArrayList<String> workoutsForWriting = getAllWorkoutsForWriting(workouts);
+		try {
+			fileWriter = new FileWriter(fileLocation);
+			for(String workout : workoutsForWriting) {
+				fileWriter.write(workout);
+				fileWriter.write("\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(fileWriter != null) {
+				try {
+					fileWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private ArrayList<String> getAllWorkoutsForWriting(HashMap<String, Workout> workouts){
+		ArrayList<String> workoutsForWriting = new ArrayList<String>();
+		
+		for(Workout workout : workouts.values()) {
+			workoutsForWriting.add(this.getStringFromWorkout(workout));
+		}
+		return workoutsForWriting;
+	}
+	
+	public Workout changeWorkout(String id, Workout newWorkout) {
+		HashMap<String, Workout> workouts = this.getAllWorkouts();
+		
+		Workout oldWorkout = workouts.get(id);
+		workouts.replace(id, oldWorkout, newWorkout);
+		
+		writeAllWorkoutsInFile(workouts);
+		
+		return newWorkout;
 	}
 	
 	private String getStringFromWorkout(Workout workout) {
