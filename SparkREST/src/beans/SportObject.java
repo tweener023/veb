@@ -34,7 +34,7 @@ public class SportObject {
 	}
 	
 	public SportObject(String id, boolean deleted, String name, TypeOfSportObject type, ArrayList<Workout> content,
-			ObjectStatus status, Location location, String logo, WorkTime workTime) {
+			ObjectStatus status, Location location, String logo, double avgGrade) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -44,7 +44,7 @@ public class SportObject {
 		this.status = status;
 		this.location = location;
 		this.logo = logo;
-		this.workTime = workTime;
+		this.avgGrade = avgGrade;
 	}
 	
 	public String getId() {
