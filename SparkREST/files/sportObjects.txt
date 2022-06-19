@@ -1,2 +1,2 @@
-111,false,BestFit,teretana,aktivna,11.00,11.00,Cara Dusana,11,Zrenjanin,21000,logo,5.00
-1111,false,MegaGym,teretana,aktivna,24.00,24.00,Kralja Petra,8,Novi Sad,23000,logo,5.00
+111,false,BestFit,teretana,radi,11.00,11.00,Cara Dusana,11,Zrenjanin,21000,logo,4.25
+1111,false,MegaGym,teretana,radi,24.00,24.00,Kralja Petra,8,Novi Sad,23000,logo,5.00

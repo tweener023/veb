@@ -145,9 +145,9 @@ public class SportObjectFileRepository {
 		Location location = new Location(Double.parseDouble(lineItems[5]), Double.parseDouble(lineItems[6]),
 				new Adress(lineItems[7],lineItems[8],lineItems[9], Integer.parseInt(lineItems[10])));
 		//Image logo = this.getImageFromString(lineItems[11]);
-		WorkTime workTime = new WorkTime();
+		double avgGrade = Double.parseDouble(lineItems[12]);
 		
-		return new SportObject(id, deleted, name, type, workouts, status, location, null, workTime);
+		return new SportObject(id, deleted, name, type, workouts, status, location, null, avgGrade);
 	}
 	
 	private TypeOfSportObject getTypeOfSportObjectFromString(String type) {
