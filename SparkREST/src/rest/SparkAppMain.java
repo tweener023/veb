@@ -63,6 +63,7 @@ public class SparkAppMain {
 				});
 				
 				get("rest/workouts", (req, res) -> {
+					res.type("application/json");
 					return g.toJson(workoutService.getAllWorkouts());
 				});
 				
@@ -85,6 +86,7 @@ public class SparkAppMain {
 				});
 				
 				get("rest/sportObjects", (req, res) -> {
+					res.type("application/json");
 					return g.toJson(sportObjectService.getAllSportObjects());
 				});
 				

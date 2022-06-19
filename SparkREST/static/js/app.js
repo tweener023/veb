@@ -1,10 +1,10 @@
-const Restaurants = { template: '<restaurants></restaurants>'}
+const SportObjects = { template: '<sportObjects></sportObjects>'}
 const LoginAndRegistration = { template: '<loginAndRegistration></loginAndRegistration>'}
 
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
-		{ path: '/', name: 'Početna', component: Restaurants},
+		{ path: '/', name: 'Početna', component: SportObjects},
 		{ path: '/login', name:'login', component:LoginAndRegistration}
 	  ]
 });
