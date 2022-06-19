@@ -13,7 +13,7 @@ public class SportObjectService {
 		
 	}
 	
-	public Collection<SportObject> getAllSportObjects() {
+	public Iterable<SportObject> getAllSportObjects() {
 		HashMap<String, SportObject> validSportObjects = new HashMap<String, SportObject>();
 		for(SportObject sportObject : sofr.getAllSportObjects().values()) {
 			if(!sportObject.getDeleted())
