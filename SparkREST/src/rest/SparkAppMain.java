@@ -43,8 +43,7 @@ public class SparkAppMain {
 			return "Works";
 		});
 		
-
-		// Registracija korisnika
+				// Registracija korisnika
 				post("rest/customers", (req, res) -> {
 					res.type("application/json");
 					String registrationParams = req.body();
@@ -55,7 +54,6 @@ public class SparkAppMain {
 					}
 					return g.toJson(customer);
 				});
-
 				
 				post("rest/workout", (req, res) -> {
 					res.type("application.json");

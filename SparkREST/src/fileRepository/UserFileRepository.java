@@ -24,7 +24,7 @@ import beans.User;
 import beans.SportObject;
 
 /**
- * Klasa koja služi da interaguje sa trajnim skladištem za korisnike.
+ * Klasa koja sluzi da interaguje sa trajnim skladistem za korisnike.
  */
 public class UserFileRepository {
 
@@ -79,7 +79,6 @@ public class UserFileRepository {
 	public Administrator getAdministrator(String username) {
 		return administrators.get(username);
 	}
-	//**********//
 	
 	/*
 	 * Metoda ce prvo proveriti da li je zauzet prosledjeni username i ukoliko nije cuva novog korisnika
@@ -125,33 +124,8 @@ public class UserFileRepository {
 				administrators.put(a.getUsername(), a);
 			}
 			else if (role == UserRole.kupac) {
-			//	int pointsCollected = Integer.parseInt(data[10]);
 				String ordersText = "";
 				Customer c = new Customer(user);
-				/*
-				try {
-					ordersText = data[11];
-					if (ordersText != null && ordersText != "") {
-						String[] idsOfOrders = ordersText.split(";");
-						WorkoutService os = new WorkoutService();
-						for (String orderId : idsOfOrders) {
-							c.get().add(os.getOrder(orderId));
-						}
-					}
-				} catch(Exception e) {
-					
-				}
-				ShoppingCartService scService = new ShoppingCartService();
-				ShoppingCart sc = scService.getShoppingCartOfUser(id);
-				if (sc == null) {
-					sc = new ShoppingCart();
-					sc.setCustomerId(id);
-				}
-				c.setShoppingCart(sc);
-				c.setPointsCollected(pointsCollected);
-				CustomerTypeService typeService = new CustomerTypeService();
-				c.setType(typeService.getAppropriateCustomerType(pointsCollected));
-				*/
 				customers.put(c.getUsername(), c);
 			}
 		}
@@ -193,6 +167,7 @@ public class UserFileRepository {
 		trainers.clear();
 		managers.clear();
 	}
+	
 	/*
 	 * Metoda sluzi za upisivanje novog kupca u fajl
 	 */
@@ -241,6 +216,7 @@ public class UserFileRepository {
 		}
 		return trainerString.toString();
 	}
+	
 	/*
 	 * Metoda sluzi za upisivanje novog korisnika u fajl. Drugi parametar sluzi da kaze da li se
 	 * fajl iznova pise ili se dodaje novi red
