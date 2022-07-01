@@ -17,7 +17,9 @@ import gsonAdapters.DateAdapter;
 import services.SportObjectService;
 import services.UserService;
 import services.WorkoutService;
+import services.CommentService;
 import spark.Session;
+import beans.Comment;
 import beans.Customer;
 import beans.SportObject;
 import beans.User;
@@ -33,6 +35,7 @@ public class SparkAppMain {
 	private static UserService userService = new UserService();
 	private static WorkoutService workoutService = new WorkoutService();
 	private static SportObjectService sportObjectService = new SportObjectService();
+	private static CommentService commentService = new CommentService();
 	
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -129,7 +132,17 @@ public class SparkAppMain {
 					}
 				});
 				
-				// Izmena korisnika
+				get("rest/comments", (req, res) -> {
+					return g.toJson(commentService.getAllComments());
+				});
+				
+				post("rest/comments", (req, res) -> {
+					res.type("application/json");
+					Comment comment = g.fromJson(req.body(), Comment.class);
+					return g.toJson(commentService.saveComment(comment));
+				});
+
+			// Izmena korisnika
 				put("rest/customers/:id", (req, res) -> {
 					res.type("application/json");
 					Customer customer = g.fromJson(req.body(), Customer.class);
@@ -138,11 +151,10 @@ public class SparkAppMain {
 					customer = userService.changeCustomer(customer);
 					// kada je username -1 znaci da je zauzeto i da izmena nije uspela
 					if (user.getClass() == Customer.class && !customer.getUsername().equals("-1")) {
-						ss.attribute("user", customer);
+					ss.attribute("user", customer);
 					}
 					return g.toJson(customer);
 				});
-
 	}
 	
 }

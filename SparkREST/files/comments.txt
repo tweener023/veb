@@ -1,0 +1,4 @@
+37f8ae3a-f390-403d-8b3f-6d3fc83449ee;111;Uredna i odlicno opremljena teretana;5
+37f8ae3a-f390-403d-8b3f-6d3fc83449ee;111;Radnici na recepciji nisu prijatni;3
+1d048d44-33d0-4a65-8ee7-f4df5e708905;1111;Izvrstan odnos cene i kvaliteta;5
+1d048d44-33d0-4a65-8ee7-f4df5e708905;1111;Ok je teretana;3

@@ -1,4 +1,5 @@
-/fileRepository/
-/gsonAdapters/
 /rest/
 /services/
+/fileRepository/
+/beans/
+/gsonAdapters/
