@@ -33,4 +33,9 @@ public class UserService {
 	public Trainer registerTrainer(Trainer trainer) {
 		return userRepository.registerTrainer(trainer);
 	}
+	
+	// IZMENA KORISNIKA
+		public Customer changeCustomer(Customer customer) {
+			return userRepository.changeCustomer(customer);
+		}
 }

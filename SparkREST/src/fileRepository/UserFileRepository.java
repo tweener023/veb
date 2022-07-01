@@ -232,7 +232,24 @@ public class UserFileRepository {
 			return false;
 		}
 	}
+	
 
+	private void writeChangedUser(String idOfChangedUser, String changedUser) {
+		ArrayList<String> lines = readLines();
+		boolean append = false;
+		for (String line : lines) {
+			String[] data = line.split(",");
+			String id = data[0];
+			
+			if (id.equals(idOfChangedUser)) {
+				writeUser(changedUser, append);
+			}else {
+				writeUser(line, append);
+			}
+			append = true;
+		}
+	}
+	
 	public Manager registerManager(Manager manager) {
 		// TODO Auto-generated method stub
 		return null;
@@ -241,6 +258,23 @@ public class UserFileRepository {
 	public Trainer registerTrainer(Trainer trainer) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/*
+	 * Metoda sluzi za izmenu korisnika u fajlu
+	 */
+	public Customer changeCustomer(Customer customer) {
+		readUsers();
+		String id = customer.getId();
+		User user = users.get(customer.getUsername());
+		
+		// provera da li je korisnicko ime vec zauzeto a da to nije taj isti korisnik
+		if (user != null && users.containsKey(customer.getUsername()) && !id.equals(user.getId())) {
+			customer.setUsername("-1");	// ako je username zauzet vrati -1 u tom polju
+			return customer;
+		}
+		writeChangedUser(customer.getId(), customerToText(customer));
+		return customer;
 	}
 	
 }
