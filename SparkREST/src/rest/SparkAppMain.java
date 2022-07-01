@@ -17,7 +17,9 @@ import gsonAdapters.DateAdapter;
 import services.SportObjectService;
 import services.UserService;
 import services.WorkoutService;
+import services.CommentService;
 import spark.Session;
+import beans.Comment;
 import beans.Customer;
 import beans.SportObject;
 import beans.User;
@@ -33,6 +35,7 @@ public class SparkAppMain {
 	private static UserService userService = new UserService();
 	private static WorkoutService workoutService = new WorkoutService();
 	private static SportObjectService sportObjectService = new SportObjectService();
+	private static CommentService commentService = new CommentService();
 	
 	public static void main(String[] args) throws Exception {
 		port(8080);
@@ -127,6 +130,16 @@ public class SparkAppMain {
 						Object retUser = userService.findUser(user.getUsername(), user.getPassword());
 						return g.toJson(retUser);
 					}
+				});
+				
+				get("rest/comments", (req, res) -> {
+					return g.toJson(commentService.getAllComments());
+				});
+				
+				post("rest/comments", (req, res) -> {
+					res.type("application/json");
+					Comment comment = g.fromJson(req.body(), Comment.class);
+					return g.toJson(commentService.saveComment(comment));
 				});
 
 	}
