@@ -140,7 +140,7 @@ public class SportObjectFileRepository {
 		boolean deleted = Boolean.parseBoolean(lineItems[1]);
 		String name = lineItems[2];
 		TypeOfSportObject type = this.getTypeOfSportObjectFromString(lineItems[3]);
-		ArrayList<Workout> workouts = addAllWokoutsInSportObject(id);
+		ArrayList<Workout> workouts = new ArrayList<Workout>();
 		ObjectStatus status = this.getStatusOfSportObject(lineItems[4]);
 		Location location = new Location(Double.parseDouble(lineItems[5]), Double.parseDouble(lineItems[6]),
 				new Adress(lineItems[7],lineItems[8],lineItems[9], Integer.parseInt(lineItems[10])));
@@ -166,18 +166,6 @@ public class SportObjectFileRepository {
 			return ObjectStatus.radi;
 		else
 			return ObjectStatus.ne_radi;
-	}
-	
-	private ArrayList<Workout> addAllWokoutsInSportObject(String sportObjectId){
-		WorkoutService ws = new WorkoutService();
-		
-		ArrayList<Workout> workouts = new ArrayList<Workout>();
-		for(Workout workout : ws.getAllWorkouts()) {
-			if(sportObjectId.equals(workout.getSportObject().getId()))
-				workouts.add(workout);
-		}
-		
-		return workouts;
 	}
 
 }

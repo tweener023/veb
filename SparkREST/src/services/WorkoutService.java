@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -43,5 +44,24 @@ public class WorkoutService {
 			return workout;
 		else
 			return null;
+	}
+	
+	public ArrayList<Workout>  getAllWorkoutsOfSportObject(String sportObjectId) {
+		ArrayList<Workout> workouts = new ArrayList<Workout>();
+		
+		for(Workout workout : this.getAllWorkouts()) {
+			if(workout.getSportObject().getId().equals(sportObjectId))
+				workouts.add(workout);
+		}
+		
+		return workouts;
+	}
+	
+	public boolean isNameOfWorkoutFree(Workout workout) {
+		for(Workout w : this.getAllWorkoutsOfSportObject(workout.getSportObject().getId())) {
+			if(w.getName().equals(workout.getName()) && !w.getId().equals(workout.getId()))
+				return false;
+		}
+		return true;
 	}
 }

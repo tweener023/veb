@@ -8,6 +8,8 @@ import fileRepository.SportObjectFileRepository;
 
 public class SportObjectService {
 	public static SportObjectFileRepository sofr = new SportObjectFileRepository();
+	public static CommentService commentService = new CommentService();
+	public static WorkoutService workoutService = new WorkoutService();
 	
 	public SportObjectService() {
 		
@@ -16,6 +18,8 @@ public class SportObjectService {
 	public Iterable<SportObject> getAllSportObjects() {
 		HashMap<String, SportObject> validSportObjects = new HashMap<String, SportObject>();
 		for(SportObject sportObject : sofr.getAllSportObjects().values()) {
+			sportObject.setAvgGrade(commentService.getAvgGradeOfSportObject(sportObject.getId()));
+			sportObject.setContent(workoutService.getAllWorkoutsOfSportObject(sportObject.getId()));
 			if(!sportObject.getDeleted())
 				validSportObjects.put(sportObject.getId(), sportObject);
 		}
@@ -38,6 +42,7 @@ public class SportObjectService {
 	public SportObject findSportObject(String id) {
 		HashMap<String, SportObject> sportObjects = sofr.getAllSportObjects();
 		SportObject sportObject = sportObjects.get(id);
+		sportObject.setContent(workoutService.getAllWorkoutsOfSportObject(sportObject.getId()));
 		if(!sportObject.getDeleted())
 			return sportObject;
 		else

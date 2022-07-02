@@ -34,4 +34,22 @@ public class CommentService {
 					comments.add(comment);
 		return comments;
 	}
+	
+	public double getAvgGradeOfSportObject(String id) {
+		ArrayList<Comment> comments = this.getAllCommentsOfSportObject(id);
+		double numOfComment = 0.00;
+		double sumOfGrade = 0.00;
+		
+		if(comments.isEmpty()) {
+			return 0;
+		}
+		
+		for(Comment comment : comments) {
+			numOfComment++;
+			sumOfGrade += comment.getGrade();
+		}
+		
+		return sumOfGrade / numOfComment;
+		
+	}
 }

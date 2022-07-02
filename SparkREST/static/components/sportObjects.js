@@ -10,7 +10,6 @@ Vue.component("sportObjects", {
 		    }
 	},
 	template: `
-	<div>
 	<div style="margin: 10px;">
 	<div>
 		<form @submit='search'>

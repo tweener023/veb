@@ -67,7 +67,7 @@ public class WorkoutFileRepository {
 		
 		writeAllWorkoutsInFile(workouts);
 		
-		return null;
+		return workoutForDeleting;
 	}
 	
 	private void writeAllWorkoutsInFile(HashMap<String, Workout> workouts) {
