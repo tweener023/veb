@@ -184,11 +184,13 @@ public class UserFileRepository {
 	}
 
 	private String customerToText(Customer customer) {
-		return customer.getId() + ","  + customer.getUsername() + "," 
-				+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
-				+ customer.getGender() + "," + customer.getDateOfBirth() + "," 
-				+ customer.getRole() + "," ;
-	}
+			return customer.getId() + ","+ "," + customer.getUsername() + "," 
+					+ customer.getPassword() + "," + customer.getName() + "," + customer.getSurname() + "," 
+					+ customer.getGender() + "," + customer.getDateOfBirth().getTime() + "," 
+					+ customer.getRole()  ;
+		}
+		
+	
 
 	private String managerToText(Manager manager) {
 		StringBuilder managerString = new StringBuilder("");
@@ -233,7 +235,6 @@ public class UserFileRepository {
 		}
 	}
 	
-
 	private void writeChangedUser(String idOfChangedUser, String changedUser) {
 		ArrayList<String> lines = readLines();
 		boolean append = false;
@@ -250,6 +251,7 @@ public class UserFileRepository {
 		}
 	}
 	
+	
 	public Manager registerManager(Manager manager) {
 		// TODO Auto-generated method stub
 		return null;
@@ -265,14 +267,7 @@ public class UserFileRepository {
 	 */
 	public Customer changeCustomer(Customer customer) {
 		readUsers();
-		String id = customer.getId();
-		User user = users.get(customer.getUsername());
 		
-		// provera da li je korisnicko ime vec zauzeto a da to nije taj isti korisnik
-		if (user != null && users.containsKey(customer.getUsername()) && !id.equals(user.getId())) {
-			customer.setUsername("-1");	// ako je username zauzet vrati -1 u tom polju
-			return customer;
-		}
 		writeChangedUser(customer.getId(), customerToText(customer));
 		return customer;
 	}

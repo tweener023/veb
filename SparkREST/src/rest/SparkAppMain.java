@@ -147,14 +147,21 @@ public class SparkAppMain {
 					res.type("application/json");
 					Customer customer = g.fromJson(req.body(), Customer.class);
 					Session ss = req.session();
-					Object user = ss.attribute("user");
-					customer = userService.changeCustomer(customer);
-					// kada je username -1 znaci da je zauzeto i da izmena nije uspela
-					if (user.getClass() == Customer.class && !customer.getUsername().equals("-1")) {
 					ss.attribute("user", customer);
+					return g.toJson(userService.changeCustomer(customer));
+				});
+
+				get("rest/logout", (req, res) -> {
+					res.type("application/json");
+					Session ss = req.session(true);
+					User user = ss.attribute("user");
+
+					if (user != null) {
+						ss.invalidate();
 					}
-					return g.toJson(customer);
+					return true;
 				});
 	}
+			
 	
 }
