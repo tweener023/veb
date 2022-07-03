@@ -16,9 +16,13 @@
 
 			<li style="float: right;" v-bind:hidden="userRole==='Neulogovan'"><a class="button" v-on:click="logout()">Odjavi se</a></li>
 			<a href="#/profile" style="float: right;" v-bind:hidden="userRole==='Neulogovan'">Moj profil</a>
+			<a href="#/allUsers" v-bind:hidden="userRole!=='administrator'">Svi korisnici</a>
+
 			<li style="float: right;" v-bind:hidden="userRole==='Neulogovan'"><span>Dobrodošli {{loggedUser.name}}</span></li>
 			<li style="float: right;" v-bind:hidden="userRole!=='Neulogovan'"><a class="button" href="#/login">Prijava/Registracija</a></li>
 		</ul>
+
+		
 		<!-- /Navigation -->
 
 		<!-- Glavni prikaz koji se smenjuje -->

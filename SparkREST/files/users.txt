@@ -1,1 +1,2 @@
+0aedc6a1-4cb9-402f-ac70-e593f000000g,admin,123,Mitar,Marketar,muski,324108000000,administrator
 6ead80b7-811c-4392-8433-9bf086dc271e,pera,123,pera,peric,zenski,Mon Jul 11 21:15:00 CEST 2022,kupac,

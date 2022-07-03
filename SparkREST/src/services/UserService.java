@@ -1,5 +1,7 @@
 package services;
 
+import com.google.gson.JsonElement;
+
 import beans.Customer;
 import beans.Manager;
 import beans.Trainer;
@@ -51,4 +53,9 @@ public class UserService {
 		public Customer changeCustomer(Customer customer) {
 			return userRepository.changeCustomer(customer);
 		}
+
+		public Iterable<Object> getAllUsers(){
+			return userRepository.getUsers();
+		}
+		
 }

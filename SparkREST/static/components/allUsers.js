@@ -96,7 +96,6 @@ Vue.component("allUsers", {
             <table>
                 <tr>
                     <td><button @click="showAllUsers()"><strong>Svi korisnici</strong></button></td>
-                    <td><button class="redButton" @click="showSuspiciousUsers()"><strong>Sumnjivi kupci</strong></button></td>
                 </tr>
             </table>
 
@@ -118,8 +117,6 @@ Vue.component("allUsers", {
                     <td>{{user.dateOfBirth | dateFormat('DD.MM.YYYY')}}</td>
                     <td>{{user.role | roleFormat}}</td>
                     <td>{{user.pointsCollected}}</td>
-                    <td v-if="user.role != 'Administrator' && !user.blocked"><button @click="blockUser(user)">Blokiraj</button></td>
-                    <td v-else-if="user.role != 'Administrator' && user.blocked"><button @click="unblockUser(user)">Odblokiraj</button></td>
                 </tr>
             </table>
         </div>
@@ -135,13 +132,6 @@ Vue.component("allUsers", {
                 this.usersToShow = this.allUsers;
             });
 
-        axios.get('rest/suspiciousCustomers')
-        .then(res => {
-            this.suspiciousCustomers = fixDate(res.data);
-        })
-        .catch(err => {
-            alert("Doslo je do greske")
-        })
     },
 	methods: {
 		getLoggedUser : function() {
@@ -197,56 +187,7 @@ Vue.component("allUsers", {
                 }
             }
         },
-        blockUser : function(user){
-            user.blocked = true;
-            user.dateOfBirth = user.dateOfBirth.getTime();
-            this.userToBlock = JSON.stringify(user);
 
-            var path = '';
-            if(user.role === 'Kupac'){
-                path += 'rest/customers/' + user.id;
-            }else if(user.role === 'Menadzer'){
-                path += 'rest/managers/' + user.id;
-            }else{
-                path +=  'rest/deliverers/' + user.id;
-            }
-
-            axios.put(path,this.userToBlock)
-            .then(res => {
-                this.getAllUsers();
-                this.getSuspiciousUsers();
-
-                alert('Korisnik je blokiran')
-            })
-            .catch(err => {
-                alert('Doslo je do greske') 
-            })
-        },
-        unblockUser : function(user){
-            user.blocked = false;
-            user.dateOfBirth = user.dateOfBirth.getTime();
-            this.userToUnblock = JSON.stringify(user);
-            
-            var path = '';
-            if(user.role === 'Kupac'){
-                path += 'rest/customers/' + user.id;
-            }else if(user.role === 'Menadzer'){
-                path += 'rest/managers/' + user.id;
-            }else{
-                path +=  'rest/deliverers/' + user.id;
-            }
-
-            axios.put(path,this.userToUnblock)
-            .then(res => {
-                this.getAllUsers();
-                this.getSuspiciousUsers();
-
-                alert('Korisnik je odblokiran')
-            })
-            .catch(err => {
-               alert('Doslo je do greske') 
-            })
-        },
         showAllUsers : function(){
             this.usersToShow = this.allUsers;
         },
@@ -261,16 +202,7 @@ Vue.component("allUsers", {
                 this.usersToShow = this.allUsers;
             });
         },
-        getSuspiciousUsers : function(){
-                axios.get('rest/suspiciousCustomers')
-            .then(res => {
-                this.suspiciousCustomers = fixDate(res.data);
-            })
-            .catch(err => {
-                alert("Doslo je do greske")
-            })
-        }
-	},
+
 	components: {
 		//vuejsDatepicker
 	},
@@ -288,10 +220,10 @@ Vue.component("allUsers", {
             }
         },
         roleFormat : function (value) {
-            if (value == 'Dostavljac') {
-                return 'Dostavljač';
+            if (value == 'trener') {
+                return 'trainer';
             }
-            else if (value == 'Menadzer') {
+            else if (value == 'menadzer') {
                 return 'Menadžer';
             }
             else {
@@ -299,4 +231,5 @@ Vue.component("allUsers", {
             }
         }
    	}
+}
 });
