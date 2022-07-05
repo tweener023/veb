@@ -161,7 +161,14 @@ public class SparkAppMain {
 					}
 					return true;
 				});
+				
+				// dobavljanje svih korisnika
+				get("rest/users", (req, res) -> {
+					res.type("application/json");
+					return g.toJson(userService.getAllUsers());
+				});
+				
+	
 	}
-			
 	
 }
