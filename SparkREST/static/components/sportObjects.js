@@ -47,6 +47,7 @@ Vue.component("sportObjects", {
 			<tr v-for="so in sportObjectsToShow">
 				<td style="width: 2500px">
 					<div style="border-style: dotted; max-width: 50%; margin: 10px;">
+						<a @click="openSportObjectPage(so)" href="#" style="font-size: large; text-decoration: none; color: black;">
 						<table>
 							<tr>
 								<td style="width: 200px;">
@@ -78,6 +79,7 @@ Vue.component("sportObjects", {
 									</td>
 							</tr>
 						</table>
+						</a>
 					</div>
 				</td>
 			</tr>
@@ -112,6 +114,10 @@ Vue.component("sportObjects", {
 					}
 			}
 			this.sportObjectsToShow = filteredSportObjects;
+		},
+		openSportObjectPage : function(sportObject) {
+			app.setSelectedSportObject(sportObject);
+			router.push('sportObjectPage');
 		}
 	}
     

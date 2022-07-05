@@ -2,6 +2,7 @@ const SportObjects = { template: '<sportObjects></sportObjects>'}
 const LoginAndRegistration = { template: '<loginAndRegistration></loginAndRegistration>'}
 const Profile = { template: '<profile></profile>'}
 const AllUsers = {template: '<allUsers></allUsers>'}
+const SportObjectPage = {template: '<sportObjectPage></sportObjectPage>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -9,8 +10,8 @@ const router = new VueRouter({
 		{ path: '/', name: 'Početna', component: SportObjects},
 		{ path: '/login', name:'login', component:LoginAndRegistration},
 		{ path: '/profile', name:'profil', component: Profile},
-		{ path: '/allUsers', name:'sviKorisnici', component: AllUsers}
-
+		{ path: '/allUsers', name:'sviKorisnici', component: AllUsers},
+		{ path: '/sportObjectPage', name:'stranicaSportskogObjekta', component: SportObjectPage}
 	  ]
 });
 
@@ -19,7 +20,8 @@ var app = new Vue({
 	el: '#mainView',
 	data: {
         loggedUser: {},
-        userRole: "Neulogovan"
+        userRole: "Neulogovan",
+        	selectedSportObject: {}
     },
 	mounted() {
         
@@ -39,6 +41,9 @@ var app = new Vue({
             axios
             .get('rest/logout')
             .then(response => (router.push('/')));
-        }
+        },
+        setSelectedSportObject : function(sportObject) {
+			this.setSelectedSportObject = sportObject;
+		}
     }
 });
