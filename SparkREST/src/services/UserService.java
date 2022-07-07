@@ -58,4 +58,24 @@ public class UserService {
 			return userRepository.getUsers();
 		}
 		
+		public Object getUserByUsername(String username) {
+			User user = userRepository.getUser(username);
+			if (user == null) {
+				return null;
+			}
+			if (user.getRole() == UserRole.kupac) {
+				return userRepository.getCustomer(username);
+			}
+			if (user.getRole() == UserRole.menadzer) {
+				return userRepository.getManager(username);
+			}
+			if (user.getRole() == UserRole.trener) {
+				return userRepository.getTrainer(username);
+			}
+			if (user.getRole() == UserRole.administrator) {
+				return userRepository.getAdministrator(username);
+			}
+			return user;
+		}
+
 }

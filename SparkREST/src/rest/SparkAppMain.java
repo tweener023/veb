@@ -168,7 +168,13 @@ public class SparkAppMain {
 					return g.toJson(userService.getAllUsers());
 				});
 				
-	
+				// DOPAVLJANJE ODREDJENOG KORISNIKA
+				get("rest/users/:username", (req, res) -> {
+					res.type("application/json");
+					String username = req.params("username");
+					return g.toJson(userService.getUserByUsername(username));
+				});
+
 	}
 	
 }
