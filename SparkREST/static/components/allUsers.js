@@ -21,7 +21,7 @@ Vue.component("allUsers", {
             <td>{{user.name}}</td>
             <td>{{user.surname}}</td>
             <td>{{user.gender}}</td>
-            <td>{{user.dateOfBirth}}</td>
+            <td>{{user.dateOfBirth | dateFormat('DD.MM.YYYY')}}</td>
             <td>{{user.role}}</td>
         </tr>
     </table>
@@ -31,6 +31,11 @@ Vue.component("allUsers", {
 	mounted () {
 		this.getLoggedUser();
         this.getAllUsers();
+        axios
+        .get('rest/users')
+        .then(response => {
+            this.allUsers = fixDate(response.data);
+        });
     },
 	methods: {
 		getLoggedUser : function() {
@@ -60,3 +65,10 @@ Vue.component("allUsers", {
 		//vuejsDatepicker
 	}
 }); 
+
+function fixDate(users) {
+	for (var u of users) {
+		u.dateOfBirth = new Date(parseInt(u.dateOfBirth));
+	}
+	return users;
+} 
